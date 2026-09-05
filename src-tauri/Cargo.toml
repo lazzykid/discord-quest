@@ -7,7 +7,7 @@ opt-level = "s"
 
 [package]
 name = "discord-quest"
-version = "0.3.0"
+version = "0.3.1"
 description = "Local process manager using Discord detectable games"
 authors = ["you"]
 edition = "2021"
