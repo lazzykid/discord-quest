@@ -1,13 +1,30 @@
 # QUEST/RIG — Discord Quest Farmer
 
-A Tauri app for Windows: feeds Discord fake "game" processes so that quests like
-*“play a game for 15 minutes”* complete themselves.
+![QUEST/RIG banner](docs/banner.png)
+
+A Tauri app for Windows that feeds Discord fake "game" processes so
+**play-a-game quests complete themselves** — launch a fake, wait 15 in-app
+minutes, claim the reward. No game installs, no Discord client patching.
+
+## Quest coverage
+
+| Quest type | Works | How |
+| --- | --- | --- |
+| **Play a game for 15 minutes** (Play on Desktop) | ✅ | the core feature — a fake process with the quest game's exe name |
+| **Play 2/3 different games** | ✅ | launch several fakes at once — the catalog is right there, timers run in parallel |
+| **Play a specific quest game** | ✅ | search the quest's game by name, launch its fake |
+| Watch-a-video / click quests | n/a | just click them in the Quests tab, no fake needed |
+| Achievement / in-game progress quests | ❌ | Discord verifies real game telemetry — a fake process can't provide it |
+
+While a fake is running, Discord sees the game as detected and its server-side
+timer accumulates; the app mirrors the 15:00 progress per session so you know
+exactly when to claim.
 
 ![build](https://github.com/YOUR_USERNAME/discord-quest/actions/workflows/release.yml/badge.svg)
 
 ## Download & install
 
-Grab `Discord Quest_0.3.0_x64-setup.exe` from
+Grab `Discord.Quest_0.3.1_x64-setup.exe` from
 [Releases](../../releases) (built automatically by CI on every `v*` tag) and run
 it — standard installer with desktop/start-menu shortcuts and an
 English/Russian language selector. WebView2 is bundled-installed if missing.
