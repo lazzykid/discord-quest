@@ -283,7 +283,7 @@ export default function App() {
         },
         ...prev.filter((p) => p.pid !== pid),
       ]);
-      notify("ok", `${game.name} — PID ${pid} · Discord picks it up in ~30s`);
+      notify("ok", `${game.name} — PID ${pid} · the client picks it up in ~30s`);
       void refreshProcesses();
     } catch (e) {
       notify("err", typeof e === "string" ? e : String(e));
@@ -466,7 +466,7 @@ export default function App() {
                         : "▶ LAUNCH FAKE"}
                   </button>
                   <p className="hint">
-                    the process lives as an off-screen window; Discord picks the game up within ~30s
+                    the process lives as an off-screen window; the client picks the game up within ~30s
                   </p>
                 </div>
               ) : (

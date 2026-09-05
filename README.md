@@ -1,10 +1,12 @@
-# QUEST/RIG — Discord Quest Farmer
+# QUEST/RIG
 
 ![QUEST/RIG banner](docs/banner.png)
 
-A Tauri app for Windows that feeds Discord fake "game" processes so
-**play-a-game quests complete themselves** — launch a fake, wait 15 in-app
-minutes, claim the reward. No game installs, no Discord client patching.
+A Windows rig that fakes running games so **play-a-game quests complete
+themselves** — launch a fake, let the timer hit 15:00, claim the reward.
+No game installs, no client patching.
+
+![app screenshot](docs/screenshot.png)
 
 ## Quest coverage
 
@@ -14,17 +16,15 @@ minutes, claim the reward. No game installs, no Discord client patching.
 | **Play 2/3 different games** | ✅ | launch several fakes at once — the catalog is right there, timers run in parallel |
 | **Play a specific quest game** | ✅ | search the quest's game by name, launch its fake |
 | Watch-a-video / click quests | n/a | just click them in the Quests tab, no fake needed |
-| Achievement / in-game progress quests | ❌ | Discord verifies real game telemetry — a fake process can't provide it |
+| Achievement / in-game progress quests | ❌ | the client verifies real game telemetry — a fake process can't provide it |
 
-While a fake is running, Discord sees the game as detected and its server-side
-timer accumulates; the app mirrors the 15:00 progress per session so you know
-exactly when to claim.
-
-![build](https://github.com/lazzykid/discord-quest/actions/workflows/release.yml/badge.svg)
+While a fake is running, the client sees the game as detected and its
+server-side timer accumulates; the app mirrors the 15:00 progress per session
+so you know exactly when to claim.
 
 ## Download & install
 
-Grab `Discord.Quest_0.3.1_x64-setup.exe` from
+Grab `Quest.Rig_0.3.2_x64-setup.exe` from
 [Releases](../../releases) (built automatically by CI on every `v*` tag) and run
 it — standard installer with desktop/start-menu shortcuts and an
 English/Russian language selector. WebView2 is bundled-installed if missing.
@@ -51,7 +51,7 @@ Requires Node 18+ and the Rust toolchain (MSVC target).
    `%LOCALAPPDATA%\DiscordQuest\games\`.
 3. Launches it as a normal process with a real (but off-screen) window titled
    after the game.
-4. Discord's process scanner sees a "running game" → the quest ticks.
+4. The client's process scanner sees a "running game" → the quest ticks.
    Per-session 15-minute progress is shown in the SIGNALS panel.
 
 Sessions are persisted to `%LOCALAPPDATA%\DiscordQuest\sessions.json`:
@@ -61,10 +61,11 @@ Sessions are persisted to `%LOCALAPPDATA%\DiscordQuest\sessions.json`:
   where it stopped,
 - all-time farmed time and run count are kept in the ALL-TIME counter.
 
-## Why Discord might not see the game
+## Why the game isn't detected
 
-- In Discord: **Settings → Privacy Settings → “Share detected activity”** must
-  be ON, otherwise detection is shown to no one — including you.
+- In the client: **Settings → Privacy Settings → “Share detected
+  activity”** must be ON, otherwise detection is shown to no one — including
+  you.
 - Detection is not instant: the scanner polls processes every ~15–30 s.
 - Achievement quests can't be faked — they need real data from the game itself.
 
@@ -84,10 +85,13 @@ Sessions are persisted to `%LOCALAPPDATA%\DiscordQuest\sessions.json`:
   `%LOCALAPPDATA%\DiscordQuest\` and overrides `bundle.icon` via
   `TAURI_CONFIG`, because tauri-winres mangles build paths containing
   apostrophes (e.g. `C:\Project's\...` → RC2135).
+- `scripts/generate-icon.mjs` renders the multi-size `icon.ico`,
+  `scripts/make-banner.ps1` renders `docs/banner.png`.
 - `game_host` is a separate crate so it can be built without triggering
   Tauri's build script (which validates bundle resources).
 
 ## Disclaimer
 
-Educational tool. Violates Discord's ToS — use at your own risk.
+Educational tool. This targets a specific chat client's quest system and
+violates its ToS — use at your own risk.
 Licensed under [MIT](LICENSE).

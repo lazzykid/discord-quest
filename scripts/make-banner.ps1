@@ -71,7 +71,7 @@ $g.DrawString($wt, $fTitle, (New-Object System.Drawing.SolidBrush($text)), $star
 $g.DrawString($rt, $fTitle, (New-Object System.Drawing.SolidBrush($acid)), ($startX + $wtW), $ty, $fmt)
 
 # ── subtitle with manual letter-spacing ─────────────────────────────────────
-$sub = 'D I S C O R D   Q U E S T   F A R M E R'
+$sub = 'P L A Y - A - G A M E   Q U E S T   F A R M E R'
 $subW = $g.MeasureString($sub, $fSub).Width
 $br = New-Object System.Drawing.SolidBrush($mute)
 $g.DrawString($sub, $fSub, $br, (($W - $subW) / 2), 880, $fmt)
