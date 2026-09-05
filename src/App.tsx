@@ -47,7 +47,7 @@ type GameRow = {
 const QUEST_TARGET_SEC = 15 * 60;
 const PIN_KEY = "dq.pinned";
 
-function TitleBar({ catalogState }: { catalogState: string }) {
+function TitleBar() {
   const win = getCurrentWindow();
 
   return (
@@ -57,11 +57,9 @@ function TitleBar({ catalogState }: { catalogState: string }) {
           <path d="M11.5 1 3 11.5h5L8.5 19 17 8.5h-5z" />
         </svg>
         <span className="wordmark">
-          QUEST<em>/rig</em>
+          QUEST<em>RIG</em>
         </span>
-        <span className="tb-stat" data-tauri-drag-region>
-          {catalogState}
-        </span>
+        <span className="tb-stat">v0.3.3</span>
       </div>
       <div className="window-btns">
         <button type="button" className="wbtn" aria-label="Minimize" onClick={() => void win.minimize()}>
@@ -138,7 +136,6 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [loadingGames, setLoadingGames] = useState(true);
-  const [catalogSource, setCatalogSource] = useState<"live" | "cache" | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [processes, setProcesses] = useState<ProcessInfo[]>([]);
   const [farm, setFarm] = useState<FarmState>({ totals: { sec: 0, runs: 0 }, stash: [] });
@@ -180,21 +177,18 @@ export default function App() {
   const loadGames = useCallback(async () => {
     setLoadingGames(true);
     setLoadError(null);
-    setCatalogSource(null);
     try {
       let raw: DiscordApp[] | null = null;
       try {
         const res = await fetch("https://discord.com/api/v9/applications/detectable");
         if (res.ok) {
           raw = (await res.json()) as DiscordApp[];
-          setCatalogSource("live");
         }
       } catch {
         raw = null;
       }
       if (!raw) {
         raw = await invoke<DiscordApp[]>("get_detectable_games");
-        setCatalogSource("cache");
       }
       const mapped = raw
         .map(toGameRow)
@@ -244,14 +238,6 @@ export default function App() {
   }, [query]);
 
   const selected = filtered[Math.min(selectedIdx, Math.max(0, filtered.length - 1))] ?? null;
-
-  const catalogState = loadingGames
-    ? "SYNCING CATALOG…"
-    : loadError
-      ? "CATALOG OFFLINE"
-      : catalogSource === "live"
-        ? `CATALOG ${games.length.toLocaleString("en-US")} · LIVE`
-        : `CATALOG ${games.length.toLocaleString("en-US")} · CACHE`;
 
   // backend reports full paths, catalog has bare names — match on file name
   const exeKey = (p: string) => p.split(/[\\/]/).pop()?.toLowerCase() ?? p.toLowerCase();
@@ -371,7 +357,7 @@ export default function App() {
     <div className="shell">
       <div className="frame">
         <div className="grid-bg" aria-hidden="true" />
-        <TitleBar catalogState={catalogState} />
+        <TitleBar />
 
         <main className="body">
           {/* ── Library ─────────────────────────────── */}
