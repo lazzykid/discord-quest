@@ -1,8 +1,6 @@
-// Tiny GUI stub: creates a real (but off-screen, non-activating) top-level
-// window titled after the game. Discord's process scanner sees both the
-// executable image name and a live window, which is what makes a process
-// look like a running game. The main app copies this binary under the
-// game's executable name before launching it.
+// tiny window host. the main app copies this exe under a game's name and runs
+// it — a live window + the right image name is all discord's process scanner
+// needs to think the game is running.
 #![windows_subsystem = "windows"]
 
 #[cfg(windows)]

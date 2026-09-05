@@ -20,7 +20,7 @@ While a fake is running, Discord sees the game as detected and its server-side
 timer accumulates; the app mirrors the 15:00 progress per session so you know
 exactly when to claim.
 
-![build](https://github.com/YOUR_USERNAME/discord-quest/actions/workflows/release.yml/badge.svg)
+![build](https://github.com/lazzykid/discord-quest/actions/workflows/release.yml/badge.svg)
 
 ## Download & install
 

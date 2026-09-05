@@ -1,6 +1,6 @@
-// Renders the app icon: ink rounded-square + acid lightning bolt (the same
-// shape as the in-app logo). Outputs src-tauri/icons/icon.ico with real
-// 16/24/32/48px BMP entries and a 256px PNG entry, plus a preview PNG.
+// draws the app icon (ink rounded square + acid bolt, same shape as the
+// titlebar mark) into a multi-size .ico: bmp entries for 16/24/32/48,
+// png for 256. also dumps a preview png to %TEMP%.
 import { deflateSync } from "node:zlib";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

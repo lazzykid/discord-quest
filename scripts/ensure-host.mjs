@@ -1,6 +1,6 @@
-// Ensures src-tauri/binaries/game_host.exe exists (and optionally rebuilds it).
-// Tauri validates bundle resource paths on every cargo build, so the file must
-// be present even for `tauri dev`.
+// stages game_host.exe into src-tauri/binaries. tauri checks that every
+// resource in the bundle config exists on *every* cargo run, even `tauri dev`,
+// so the file has to be there before anything else happens.
 //   node scripts/ensure-host.mjs          -> build only if missing
 //   node scripts/ensure-host.mjs --fresh  -> always rebuild from source
 import { execSync } from "node:child_process";

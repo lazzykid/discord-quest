@@ -1,5 +1,4 @@
-# Renders docs/banner.png (1920x1080) — ink background, dot grid, the app
-# icon (rounded square + acid bolt) and display typography. Pure GDI+, no deps.
+# renders docs/banner.png (1920x1080) with gdi+. rerun after icon changes.
 #   powershell -File scripts/make-banner.ps1
 Add-Type -AssemblyName System.Drawing
 
@@ -37,23 +36,22 @@ function New-RoundedRect([single]$x, [single]$y, [single]$w, [single]$h, [single
     return $p
 }
 
-# ── the icon, large: rounded square + acid bolt ─────────────────────────────
+# ── the icon, large: same colors as icon.ico (ink fill, no tint) ────────────
 $size = 400
 $ix = ($W - $size) / 2
 $iy = 170
 $sq = New-RoundedRect $ix $iy $size $size ($size * 0.22)
-$g.FillPath((New-Object System.Drawing.SolidBrush($ink2)), $sq)
-$g.DrawPath((New-Object System.Drawing.Pen($line2, 3)), $sq)
+$g.FillPath((New-Object System.Drawing.SolidBrush($ink)), $sq)
+$g.DrawPath((New-Object System.Drawing.Pen($line2, 2)), $sq)
 
-# bolt polygon from the 20x20 design grid, centered inside the square
+# bolt polygon from the 20x20 design grid, mapped exactly like the .ico
 $boltDesign = @(
     @(11.5, 1), @(3, 11.5), @(8, 11.5), @(8.5, 19), @(17, 8.5), @(12, 8.5)
 )
-$span = 18.0  # bolt occupies 3..17 x 1..19
 $boltPts = New-Object 'System.Drawing.PointF[]' 6
 for ($i = 0; $i -lt 6; $i++) {
-    $bx = (($boltDesign[$i][0] - 10) / $span + 0.5) * $size
-    $by = (($boltDesign[$i][1] - 10) / $span + 0.5) * $size
+    $bx = ($boltDesign[$i][0] / 20) * $size
+    $by = ($boltDesign[$i][1] / 20) * $size
     $boltPts[$i] = New-Object System.Drawing.PointF(($ix + $bx), ($iy + $by))
 }
 $g.FillPolygon((New-Object System.Drawing.SolidBrush($acid)), $boltPts)

@@ -191,8 +191,8 @@ fn load_saved() -> (HashMap<u32, TrackedProcess>, Vec<StashedSession>, Totals) {
 
     for s in saved.sessions {
         let exe_path = PathBuf::from(&s.exe_path);
-        // Still running (e.g. the app was closed while fakes kept going):
-        // adopt it and the timer continues from where it is.
+        // still alive after a restart (fakes outlive the app) — adopt it,
+        // timer keeps running
         if win::process_matches(s.pid, &exe_path) {
             processes.insert(
                 s.pid,
@@ -204,8 +204,7 @@ fn load_saved() -> (HashMap<u32, TrackedProcess>, Vec<StashedSession>, Totals) {
                 },
             );
         } else {
-            // Died while we were away: keep the time it reached so the user
-            // can resume; the run gets banked when the stash entry ends.
+            // died while we were away — stash what it reached so it can be resumed
             let elapsed =
                 s.accumulated + saved.updated_at.saturating_sub(s.started_at);
             stash.push(StashedSession {
@@ -236,8 +235,7 @@ fn now_unix() -> u64 {
 }
 
 fn games_root() -> PathBuf {
-    // Keep fakes out of %TEMP%: it gets cleaned up by disk cleaners and some
-    // security tools flag executables launched from there.
+    // not %TEMP%: cleaners wipe it and some AV heuristics flag exes that run from there
     let base = std::env::var("LOCALAPPDATA")
         .map(PathBuf::from)
         .unwrap_or_else(|_| std::env::temp_dir());
@@ -272,9 +270,8 @@ fn resolve_game_exe_path(exe_name: &str) -> Result<PathBuf, String> {
     Ok(dest)
 }
 
-/// Locate the tiny window host binary that gets copied under the game's name.
-/// Falls back to notepad.exe so launching still works even if the host was
-/// not built for some reason.
+/// game_host.exe gets copied under the game's name before launch.
+/// notepad.exe is the last-ditch fallback so launch works even without a build.
 fn host_source() -> PathBuf {
     host_source_candidates()
         .into_iter()
@@ -447,8 +444,8 @@ mod win {
         state.found
     }
 
-    /// Make the game window real but invisible to the user: off-screen,
-    /// no taskbar/alt-tab entry, no activation, titled after the game.
+    // real window, just off-screen with no taskbar button — enough for the
+    // scanner, invisible to the user
     pub fn tame_window(pid: u32, title: &str) -> bool {
         for _ in 0..40 {
             if let Some(hwnd) = find_main_window(pid) {
@@ -598,6 +595,7 @@ fn start_dummy_process(
             .processes
             .lock()
             .map_err(|_| "Process state is locked".to_string())?;
+        // one instance per game exe
         if let Some((&pid, _)) = map.iter().find(|(_, t)| t.exe_path == dest) {
             return Err(format!(
                 "{} is already running (PID {})",
@@ -714,8 +712,7 @@ fn list_processes(state: tauri::State<AppState>) -> Result<Vec<ProcessInfo>, Str
         .lock()
         .map_err(|_| "Process state is locked".to_string())?;
 
-    // Reap sessions whose process died on its own: bank their time and stash
-    // them so they can be resumed where they stopped.
+    // reaped = the process died on its own; stash it so it can be resumed
     let dead: Vec<(u32, TrackedProcess)> = map
         .iter()
         .filter(|(pid, t)| !win::process_matches(**pid, &t.exe_path))

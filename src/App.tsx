@@ -253,8 +253,7 @@ export default function App() {
         ? `CATALOG ${games.length.toLocaleString("en-US")} · LIVE`
         : `CATALOG ${games.length.toLocaleString("en-US")} · CACHE`;
 
-  // Backend reports full paths, the catalog uses bare exe names — compare by
-  // file name so a running game can't be launched twice.
+  // backend reports full paths, catalog has bare names — match on file name
   const exeKey = (p: string) => p.split(/[\\/]/).pop()?.toLowerCase() ?? p.toLowerCase();
 
   const runningExes = useMemo(
