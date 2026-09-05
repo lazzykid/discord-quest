@@ -24,10 +24,16 @@ so you know exactly when to claim.
 
 ## Download & install
 
-Grab `Quest.Rig_0.3.2_x64-setup.exe` from
+Grab `Quest.Rig_0.3.3_x64-setup.exe` from
 [Releases](../../releases) (built automatically by CI on every `v*` tag) and run
 it — standard installer with desktop/start-menu shortcuts and an
 English/Russian language selector. WebView2 is bundled-installed if missing.
+
+> the installers aren't code-signed, so Windows SmartScreen will show
+> "Windows protected your PC" on first launch — that's expected for any
+> unsigned build. **More info → Run anyway**. everything is built
+> transparently by GitHub Actions straight from the tagged source, no hands
+> involved.
 
 Building from source instead:
 
