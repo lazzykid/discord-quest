@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = dirname(fileURLToPath(import.meta.url)); // script lives at project root
+const root = dirname(dirname(fileURLToPath(import.meta.url))); // repo root
 
 // bolt polygon in a 20x20 design grid (matches the titlebar mark)
 const BOLT = [
