@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Discord Quest",
+  "version": "0.3.0",
+  "identifier": "com.discordquest.app",
+  "build": {
+    "beforeDevCommand": "npm run host && npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run host:fresh && npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Discord Quest",
+        "width": 1320,
+        "height": 800,
+        "minWidth": 1080,
+        "minHeight": 680,
+        "resizable": true,
+        "maximizable": true,
+        "decorations": false,
+        "transparent": true,
+        "shadow": true,
+        "backgroundColor": "#00000000"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/icon.ico"],
+    "windows": {
+      "nsis": {
+        "installMode": "both",
+        "displayLanguageSelector": true,
+        "languages": ["English", "Russian"]
+      }
+    },
+    "resources": {
+      "binaries/game_host.exe": "game_host.exe"
+    }
+  }
+}

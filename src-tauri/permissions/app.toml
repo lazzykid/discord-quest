@@ -1,0 +1,34 @@
+[[permission]]
+identifier = "allow-get-detectable-games"
+description = "Load Discord detectable applications"
+commands.allow = ["get_detectable_games"]
+
+[[permission]]
+identifier = "allow-start-dummy-process"
+description = "Start a dummy Windows process"
+commands.allow = ["start_dummy_process"]
+
+[[permission]]
+identifier = "allow-stop-dummy-process"
+description = "Stop a dummy process by PID"
+commands.allow = ["stop_dummy_process"]
+
+[[permission]]
+identifier = "allow-list-processes"
+description = "List tracked dummy processes"
+commands.allow = ["list_processes"]
+
+[[permission]]
+identifier = "allow-resume-stashed-process"
+description = "Resume a stashed session by executable path"
+commands.allow = ["resume_stashed_process"]
+
+[[permission]]
+identifier = "allow-drop-stashed-process"
+description = "Drop a stashed session by executable path"
+commands.allow = ["drop_stashed_process"]
+
+[[permission]]
+identifier = "allow-get-farm-state"
+description = "Read farm totals and stashed sessions"
+commands.allow = ["get_farm_state"]

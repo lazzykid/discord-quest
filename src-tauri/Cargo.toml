@@ -1,0 +1,34 @@
+[workspace]
+members = ["game-host"]
+
+[profile.release]
+strip = true
+opt-level = "s"
+
+[package]
+name = "discord-quest"
+version = "0.3.0"
+description = "Local process manager using Discord detectable games"
+authors = ["you"]
+edition = "2021"
+
+[lib]
+name = "discord_quest_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = { version = "2.12", default-features = false, features = ["tls", "json"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_System_Threading",
+  "Win32_Security",
+  "Win32_UI_WindowsAndMessaging",
+] }
